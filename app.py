@@ -86,7 +86,7 @@ def webGetLight(light):
 def webSetOven(value):
 	db = connectToDatabase()
 	setOven(db, value)
-	return "The oven is now set to " + value
+	return "The oven is now set to " + str(value)
 
 @app.route("/set/light/<value>")
 def webSetLight(value):
