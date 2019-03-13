@@ -100,6 +100,18 @@ def webSetTimer(value, time):
 	setTimer(db, time, value)
 	return "The oven timer is now set for "  + str(time) + " " + str(value)
 
+@app.route("/chatbot")
+def root():
+	return """
+	<body>
+		<iframe
+		    allow="microphone;"
+		    width="350"
+		    height="430"
+		    src="https://console.dialogflow.com/api-client/demo/embedded/5bac2c68-39c7-4add-a49a-d7cfdc429ebf">
+		</iframe>  
+	</body>
+	"""
 
 # for readability's sake, here we represent the status as HTML
 # below in the webhook section we represent it as a string
