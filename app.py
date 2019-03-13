@@ -185,9 +185,13 @@ def handleDialog():
 		print(response)
 		return jsonify({'fulfillmentText': response})
 	elif data['queryResult']['intent']['displayName'] == "setOven":
-		number = data['queryResult']['parameters']['number']
+		if (data['queryResult']['parameters']['number']):	
+			number = data['queryResult']['parameters']['number']
+			response = webSetOven(number)
+		else:
+			status = data['queryResult']['parameters']['oven-status']
+			response = webSetOven(status)
 		# set the light and get the response
-		response = webSetOven(number)
 		print(response)
 		return jsonify({'fulfillmentText': response})
 	elif data['queryResult']['intent']['displayName'] == "setLight":
