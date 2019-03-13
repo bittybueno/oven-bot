@@ -101,7 +101,7 @@ def webSetTimer(value, time):
 	return "The oven timer is now set for "  + str(time) + " " + str(value)
 
 @app.route("/chatbot")
-def root():
+def bot_page():
 	return """
 	<body>
 		<iframe
