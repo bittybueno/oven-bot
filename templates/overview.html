@@ -1,0 +1,19 @@
+<!doctype html>
+<title>Hello from Flask</title>
+{% if oven %}
+  <h1>The oven is set to {{ oven.decode('UTF-8') }}!</h1>
+{% else %}
+  <h1>The oven is off.</h1>
+{% endif %}
+
+{% if timer %}
+  <h1>The timer is set to {{ timer.decode('UTF-8') }}!</h1>
+{% else %}
+  <h1>The timer is off.</h1>
+{% endif %}
+
+{% if light %}
+  <h1>The light is {{ light.decode('UTF-8') }}!</h1>
+{% else %}
+  <h1>The oven light is off.</h1>
+{% endif %}
