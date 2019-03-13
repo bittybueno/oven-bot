@@ -45,7 +45,7 @@ def setLight(db, value):
 	db.set('light', value)
 
 def setTimer(db, time, value):
-	string = str(value) + ' ' + str(time)
+	string = str(time) + ' ' str(value)
 	db.set('timer', string)
 
 def getApp(db, app):
