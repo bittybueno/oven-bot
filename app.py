@@ -92,13 +92,13 @@ def webSetOven(value):
 def webSetLight(value):
 	db = connectToDatabase()
 	setLight(db, value)
-	return "The oven light is now " + value
+	return "The oven light is now " + str(value)
 
 @app.route("/set/timer/<time>/<value>")
 def webSetTimer(value, time):
 	db = connectToDatabase()
 	setTimer(db, time, value)
-	return "The oven timer is now set for "  + value + " " + time
+	return "The oven timer is now set for "  + str(value) + " " + str(time)
 
 
 # for readability's sake, here we represent the status as HTML
