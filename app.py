@@ -98,7 +98,7 @@ def webSetLight(value):
 def webSetTimer(value, time):
 	db = connectToDatabase()
 	setTimer(db, time, value)
-	return "The oven timer is now set for "  + str(time) + " - " + str(value)
+	return "The oven timer is now set for "  + str(time) + " " + str(value)
 
 
 # for readability's sake, here we represent the status as HTML
@@ -201,13 +201,10 @@ def handleDialog():
 		print(response)
 		return jsonify({'fulfillmentText': response})
 	elif data['queryResult']['intent']['displayName'] == "setTimer":
-		if (data['queryResult']['parameters']['amount']):
-			value = data['queryResult']['parameters']['duration']['unit']
-			time = data['queryResult']['parameters']['duration']['amount']
-			response = webSetTimer(value, time)
-		else:
-			response = webSetTimer('off', 0)
+		value = data['queryResult']['parameters']['duration']['unit']
+		time = data['queryResult']['parameters']['duration']['amount']
 		# set the light and get the response
+		response = webSetTimer(value, time)
 		print(response)
 		return jsonify({'fulfillmentText': response})
 
