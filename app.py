@@ -98,7 +98,7 @@ def webSetLight(value):
 def webSetTimer(value, time):
 	db = connectToDatabase()
 	setTimer(db, time, value)
-	return "The oven timer is now set for "  + str(value) + " " + str(time)
+	return "The oven timer is now set for "  + str(time) + " " + str(value)
 
 
 # for readability's sake, here we represent the status as HTML
