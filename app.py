@@ -10,26 +10,11 @@ import json
 
 APPLIANCES = ['oven', 'timer', 'light']
 
-# use local settings for connecting to the database
-# example from https://stackoverflow.com/questions/9383450/how-can-i-detect-herokus-environment
 USE_LOCAL = not 'ON_HEROKU' in os.environ
 
-# database functions go here
 
-# connect to the database and return the db handle
-def connectToDatabase():
-	# db = None
-	# if USE_LOCAL:
-	# 	db = redis.Redis(host='localhost', port=6379, db=0)
-	# else:
-	# 	db = redis.from_url(os.environ.get("REDIS_URL"))
-
-	# # initialize if we need to
-	# for light in LIGHTS:
-	# 	if not db.exists(light):
-	# 		db.set(light, 'off')		
+def connectToDatabase():		
 	db = redis.from_url(os.environ.get("REDIS_URL"))
-	#db = redis.Redis(host='localhost', port=6379, db=0)
 	return db
 
 def init(db):
@@ -115,58 +100,12 @@ def webStatus(textOnly=False):
 			
 	return statusString
 
-@app.route("/reset")
-def webReset():
-	db = connectToDatabase()
-	initialize(db)
-	return "ok"
-
-# this is for debugging the webhook code
-# it just prints out the json of the last webhook request
-@app.route("/lastRequest")
-def lastRequest():
-	db = connectToDatabase()
-	req = db.get("lastRequest")
-	return req
-
-# webhook code goes here
-# this is set to receive a webhook request from DialogFlow
-# see https://dialogflow.com/docs/fulfillment/how-it-works for details
-# 
-# basically, the url /dialog will expect a JSON object as described above
-# and will parse the attached JSON object, then do stuff
-
 @app.route("/dialog", methods=["POST"])
 def handleDialog():
 	data = request.get_json()
 	
-	# save this request for debugging
 	db = connectToDatabase()
 	db.set("lastRequest", json.dumps(data))
-	
-	# debug
-	# print data
-	
-	# now, do stuff based on the JSON data
-	# in particular we want to look at the queryResult.intent.displayName to
-	# see which intent is triggered, and queryResult.parameters to see params
-	
-	# if data['queryResult']['intent']['displayName'] == "getOverallStatus":
-	# 	response = webStatus(True)
-	# 	print(response)
-	# 	return jsonify({'fulfillmentText': response})
-	# elif data['queryResult']['intent']['displayName'] == "getLightStatus":
-	# 	lightName = data['queryResult']['parameters']['light-name']
-	# 	response = webGetLight(lightName)
-	# 	print(response)
-	# 	return jsonify({'fulfillmentText': response})
-	# elif data['queryResult']['intent']['displayName'] == "setLightStatus":
-	# 	lightName = data['queryResult']['parameters']['light-name']
-	# 	lightStatus = data['queryResult']['parameters']['light-status']
-	# 	# set the light and get the response
-	# 	response = webSetLight(lightName, lightStatus)
-	# 	print(response)
-	# 	return jsonify({'fulfillmentText': response})
 
 	if data['queryResult']['intent']['displayName'] == "getOverallStatus":
 		response = webStatus(True)
@@ -186,19 +125,16 @@ def handleDialog():
 		else:
 			status = data['queryResult']['parameters']['oven-status']
 			response = webSetOven(status)
-		# set the light and get the response
 		print(response)
 		return jsonify({'fulfillmentText': response})
 	elif data['queryResult']['intent']['displayName'] == "setLight":
 		value = data['queryResult']['parameters']['light-status']
-		# set the light and get the response
 		response = webSetLight(value)
 		print(response)
 		return jsonify({'fulfillmentText': response})
 	elif data['queryResult']['intent']['displayName'] == "setTimer":
 		value = data['queryResult']['parameters']['duration']['unit']
 		time = data['queryResult']['parameters']['duration']['amount']
-		# set the light and get the response
 		response = webSetTimer(value, time)
 		print(response)
 		return jsonify({'fulfillmentText': response})
