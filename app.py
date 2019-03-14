@@ -180,7 +180,7 @@ def handleDialog():
 	elif data['queryResult']['intent']['displayName'] == "setOven":
 		if (data['queryResult']['parameters']['celsius']):
 			response = "Sorry, I'm American"
-		else if (data['queryResult']['parameters']['number']):	
+		elif (data['queryResult']['parameters']['number']):	
 			number = data['queryResult']['parameters']['number']
 			response = webSetOven(number)
 		else:
