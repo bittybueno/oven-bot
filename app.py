@@ -8,8 +8,6 @@ import os
 import redis
 import json
 
-# available light settings
-# LIGHTS = ['kitchen', 'livingroom', 'bedroom']
 APPLIANCES = ['oven', 'timer', 'light']
 
 # use local settings for connecting to the database
@@ -77,11 +75,7 @@ def webGetLight(light):
 	value = getLight(db, light)
 	return "The " + light + " light is " + value
 
-# @app.route("/set/<light>/<value>")
-# def webSetLight(light, value):
-# 	db = connectToDatabase()
-# 	setLight(db, light, value)
-# 	return "The " + light + " light is now " + value
+
 @app.route("/set/oven/<value>")
 def webSetOven(value):
 	db = connectToDatabase()
@@ -102,21 +96,8 @@ def webSetTimer(value, time):
 
 @app.route("/chatbot")
 def bot_page():
-	return """
-	<body>
-		<iframe
-		    allow="microphone;"
-		    width="350"
-		    height="430"
-		    src="https://console.dialogflow.com/api-client/demo/embedded/5bac2c68-39c7-4add-a49a-d7cfdc429ebf">
-		</iframe>  
-	</body>
-	"""
+	return render_template('chatbot.html')
 
-# for readability's sake, here we represent the status as HTML
-# below in the webhook section we represent it as a string
-# to improve understandability of the text
-# if textOnly is true, strip out the html
 
 @app.route("/status")
 def webStatus(textOnly=False):
@@ -197,7 +178,9 @@ def handleDialog():
 		print(response)
 		return jsonify({'fulfillmentText': response})
 	elif data['queryResult']['intent']['displayName'] == "setOven":
-		if (data['queryResult']['parameters']['number']):	
+		if (data['queryResult']['parameters']['celsius']):
+			response = "Sorry, I'm American"
+		else if (data['queryResult']['parameters']['number']):	
 			number = data['queryResult']['parameters']['number']
 			response = webSetOven(number)
 		else:
